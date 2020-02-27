@@ -93,7 +93,7 @@ class ServiceNowAdapter extends EventEmitter {
    * @param {ServiceNowAdapter~requestCallback} [callback] - The optional callback
    *   that handles the response.
    */
-    healthcheck(callback) {
+    healthcheck() {
         this.getRecord((result, error) => {
             /**
              * For this lab, complete the if else conditional
@@ -115,7 +115,7 @@ class ServiceNowAdapter extends EventEmitter {
                  * for the callback's errorMessage parameter.
                  */
                 log.error('ServiceNow: Instance ' + this.id + ' is available.');
-                this.emitOffline((result, error) => callback(result, error));
+                this.emitOffline();
             } else {
                 /**
                  * Write this block.
@@ -128,7 +128,7 @@ class ServiceNowAdapter extends EventEmitter {
                  * responseData parameter.
                  */
                 log.debug('ServiceNow: Instance ' + this.id + ' is available.');
-                this.emitOnline((result, error) => callback(result, error));
+                this.emitOnline();
             }
         });
     }
@@ -140,7 +140,7 @@ class ServiceNowAdapter extends EventEmitter {
    * @description Emits an OFFLINE event to IAP indicating the external
    *   system is not available.
    */
-    emitOffline(callback) {
+    emitOffline() {
         this.emitStatus('OFFLINE');
 
     }
@@ -152,7 +152,7 @@ class ServiceNowAdapter extends EventEmitter {
      * @description Emits an ONLINE event to IAP indicating external
      *   system is available.
      */
-    emitOnline(callback) {
+    emitOnline() {
         this.emitStatus('ONLINE');
 
     }
