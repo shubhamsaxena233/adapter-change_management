@@ -182,20 +182,7 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-      const conn = new ServiceNowConnector({
-      url: this.props.url,
-      username: this.props.auth.username,
-      password: this.props.auth.password,
-      serviceNowTable: this.props.serviceNowTable
-    });
-
-    conn.get((data, error) => {
-    if (error) {
-      console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
-    }
-    console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
-  });
-    
+      let response = this.connector.get(callback);  
   }
 
   /**
