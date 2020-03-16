@@ -22,9 +22,9 @@
         },
         "password": {
           "type": "string",
-          "default": "ServiceNow@123",
+          "default": "ServiceNow@23",
           "examples": [
-            "ServiceNow@123"
+            "ServiceNow@23"
           ]
         }
       },
