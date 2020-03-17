@@ -5,9 +5,9 @@
   "properties": {
     "url": {
       "type": "string",
-      "default": "https://dev49385.service-now.com/",
+      "default": "https://dev92621.service-now.com/",
       "examples": [
-        "https://dev49385.service-now.com/"
+        "https://dev92621.service-now.com/"
       ]
     },
     "auth": {
@@ -22,9 +22,9 @@
         },
         "password": {
           "type": "string",
-          "default": "ServiceNow@23",
+          "default": "ServiceNow@123",
           "examples": [
-            "ServiceNow@23"
+            "ServiceNow@123"
           ]
         }
       },
