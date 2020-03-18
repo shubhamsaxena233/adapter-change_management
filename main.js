@@ -194,16 +194,18 @@ healthcheck(callback) {
       serviceNowTable: this.props.serviceNowTable
     });
 
-    log.info('In getRecord 3');
-    conn.get((data, error) => {
-        log.info('In getRecord 4');
-    if (error) {
-        log.info('In getRecord 5');
-      console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
-    }
-    log.info('In getRecord 6');
-    console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
-  });
+   return callback(con.get());
+
+//     log.info('In getRecord 3');
+//     conn.get((data, error) => {
+//         log.info('In getRecord 4');
+//     if (error) {
+//         log.info('In getRecord 5');
+//       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
+//     }
+//     log.info('In getRecord 6');
+//     console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
+//   });
     
   }
 
