@@ -68,7 +68,6 @@ class ServiceNowAdapter extends EventEmitter {
    * @param {ServiceNowAdapter~adapterProperties} adapterProperties - Adapter instance's properties object.
    */
   constructor(id, adapterProperties) {
-      log.info("inside constructor"+adapterProperties.url+" "+adapterProperties.auth.username);
     // Call super or parent class' constructor.
     super();
     // Copy arguments' values to object properties.
@@ -101,7 +100,7 @@ class ServiceNowAdapter extends EventEmitter {
   connect() {
     // As a best practice, Itential recommends isolating the health check action
     // in its own method.
-   this.healthcheck();
+    this.healthcheck();
   }
 
   /**
@@ -115,7 +114,6 @@ class ServiceNowAdapter extends EventEmitter {
  *   that handles the response.
  */
 healthcheck(callback) {
-    
  this.getRecord((result, error) => {
    /**
     * For this lab, complete the if else conditional
@@ -135,7 +133,7 @@ healthcheck(callback) {
       * If an optional IAP callback function was passed to
       * healthcheck(), execute it passing the error seen as an argument
       * for the callback's errorMessage parameter.
-      */log.error('ServiceNow: Instance ' + this.id + ' is available.');
+      */log.error('ServiceNow: Instance ' + this.id + ' is not available.');
      this.emitOffline((result, error) => callback(result, error));
     
    } else {
@@ -152,8 +150,6 @@ healthcheck(callback) {
      this.emitOnline((result, error) => callback(result, error));
    }
  });
-
-
 }
 
   /**
@@ -203,38 +199,37 @@ healthcheck(callback) {
      *   handles the response.
      */
     getRecord(callback) {
-          /**
+        /**
          * Write the body for this function.
          * The function is a wrapper for this.connector's get() method.
          * Note how the object was instantiated in the constructor().
          * get() takes a callback function.
          */
         let response = this.connector.get(callback);
-        if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+        // if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
-            var result = response.body.result;
+        //     var result = response.body.result;
 
-            for (var j = 0; j < result.length; j++) {
-                for (var key in result[j]) {
-                    if (result[j].hasOwnProperty(key)) {
-                        if (key === 'number'){
-                            result[j].change_ticket_number = result[j].number;
-                            delete result[j].number;
-                        }else if(key === 'sys_id'){
-                            result[j].change_ticket_key = result[j].sys_id;
-                            delete result[j].sys_id;
-                        }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-                            continue;
-                        } else {
-                            delete result[j][key];
-                        }
-                    }
-                }
-            }
-        }
-       
-       return result;
+        //     for (var j = 0; j < result.length; j++) {
+        //         for (var key in result[j]) {
+        //             if (result[j].hasOwnProperty(key)) {
+        //                 if (key === 'number'){
+        //                     result[j].change_ticket_number = result[j].number;
+        //                     delete result[j].number;
+        //                 }else if(key === 'sys_id'){
+        //                     result[j].change_ticket_key = result[j].sys_id;
+        //                     delete result[j].sys_id;
+        //                 }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
+        //                     continue;
+        //                 } else {
+        //                     delete result[j][key];
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
+        // return result;
     }
 
 
@@ -283,33 +278,13 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-    var callOptions =  {
-      url: this.props.url,
-      username: this.props.auth.username,
-      password: this.props.auth.password,
-      serviceNowTable: this.props.serviceNowTable
-    };
-            let response = this.connector.post(callOptions, callback);
-            
-            if (response && response !== null && typeof (response === 'object') && ('body' in response)) 
-            {
-               
-                var result = response.body.result;
-               
-                for (var key in result) {
-                    if (key === 'number'){
-                            result.change_ticket_number = result.number;
-                            delete result.number;
-                        }else if(key === 'sys_id'){
-                            result.change_ticket_key = result.sys_id;
-                            delete result.sys_id;
-                        }else if( !(key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end')) {
-                            delete result[key];
-                        }
-                }
-                
-                return result;
-            }
+     
+     this.connector.post(callback, (data, error) => {
+    if (error) {
+      console.error(`\nError returned from POST request:\n${JSON.stringify(error)}`);
+    }
+    console.log(`\nResponse returned from POST request:\n${JSON.stringify(data)}`)
+  });
   }
 }
 
