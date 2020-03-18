@@ -180,6 +180,7 @@ healthcheck(callback) {
    *   handles the response.
    */
   getRecord(callback) {
+      log.info('In getRecord 2');
     /**
      * Write the body for this function.
      * The function is a wrapper for this.connector's get() method.
@@ -193,10 +194,14 @@ healthcheck(callback) {
       serviceNowTable: this.props.serviceNowTable
     });
 
+log.info('In getRecord 3');
     conn.get((data, error) => {
+        log.info('In getRecord 4');
     if (error) {
+        log.info('In getRecord 5');
       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
     }
+    log.info('In getRecord 6');
     console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
   });
     
