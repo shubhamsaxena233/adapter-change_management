@@ -194,7 +194,7 @@ healthcheck(callback) {
       serviceNowTable: this.props.serviceNowTable
     });
 
-   return callback(con.get());
+   return callback(conn.get());
 
 //     log.info('In getRecord 3');
 //     conn.get((data, error) => {
