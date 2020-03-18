@@ -198,7 +198,7 @@ healthcheck(callback) {
     conn.get((data, error) => {
         log.info('In getRecord 4');
     if (error) {
-        //log.info('In getRecord 5');
+        log.info('In getRecord 5');
       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
     }
     //log.info('In getRecord 6');
