@@ -201,7 +201,7 @@ healthcheck(callback) {
         log.info('In getRecord 5');
       console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
     }
-    //log.info('In getRecord 6');
+    log.info('In getRecord 6');
     console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
   });
     
