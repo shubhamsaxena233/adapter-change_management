@@ -94,7 +94,9 @@ class ServiceNowAdapter extends EventEmitter {
  *   that handles the response.
  */
 healthcheck(callback) {
+    log.info('In healthcheck');
  this.getRecord((result, error) => {
+     log.info('In getRecord');
    /**
     * For this lab, complete the if else conditional
     * statements that check if an error exists
@@ -102,6 +104,7 @@ healthcheck(callback) {
     * the blocks for each branch.
     */
    if (error) {
+       log.info('In error');
      /**
       * Write this block.
       * If an error was returned, we need to emit OFFLINE.
@@ -115,6 +118,7 @@ healthcheck(callback) {
       * for the callback's errorMessage parameter.
       */
    } else {
+       log.info('In success');
      /**
       * Write this block.
       * If no runtime problems were detected, emit ONLINE.
@@ -176,38 +180,27 @@ healthcheck(callback) {
    *   handles the response.
    */
   getRecord(callback) {
-        /**
-         * Write the body for this function.
-         * The function is a wrapper for this.connector's get() method.
-         * Note how the object was instantiated in the constructor().
-         * get() takes a callback function.
-         */
-        let response = this.connector.get(callback);
-        // if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
+    /**
+     * Write the body for this function.
+     * The function is a wrapper for this.connector's get() method.
+     * Note how the object was instantiated in the constructor().
+     * get() takes a callback function.
+     */
+      const conn = new ServiceNowConnector({
+      url: this.props.url,
+      username: this.props.auth.username,
+      password: this.props.auth.password,
+      serviceNowTable: this.props.serviceNowTable
+    });
 
-        //     var result = response.body.result;
-
-        //     for (var j = 0; j < result.length; j++) {
-        //         for (var key in result[j]) {
-        //             if (result[j].hasOwnProperty(key)) {
-        //                 if (key === 'number'){
-        //                     result[j].change_ticket_number = result[j].number;
-        //                     delete result[j].number;
-        //                 }else if(key === 'sys_id'){
-        //                     result[j].change_ticket_key = result[j].sys_id;
-        //                     delete result[j].sys_id;
-        //                 }else if( key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-        //                     continue;
-        //                 } else {
-        //                     delete result[j][key];
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // return result;
+    conn.get((data, error) => {
+    if (error) {
+      console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
     }
+    console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
+  });
+    
+  }
 
   /**
    * @memberof ServiceNowAdapter
