@@ -206,6 +206,7 @@ healthcheck(callback) {
          * get() takes a callback function.
          */
         let response = this.connector.get(callback);
+        log.info("inside getRecord 2 : "+response);
         // if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
 
         //     var result = response.body.result;

@@ -2,6 +2,7 @@ const request = require('request');
 
 const validResponseRegex = /(2\d\d)/;
 
+var answer=null;
 
 /**
  * The ServiceNowConnector class.
@@ -61,6 +62,9 @@ class ServiceNowConnector {
     getCallOptions.method = 'GET';
     getCallOptions.query = 'sysparm_limit=1';
     this.sendRequest(getCallOptions, (results, error) => callback(results, error));
+    log.info("----------------answer---------------------");
+    callback.results=answer;
+    //return answer;
   }
 
   /**
@@ -138,6 +142,7 @@ isHibernating(response) {
     if (error) {
       console.error('Error present.');
       callback.error = error;
+      answer=error;
     } else if (!validResponseRegex.test(response.statusCode)) {
       console.error('Bad response code.');
       callback.error = response;
@@ -146,9 +151,12 @@ isHibernating(response) {
       console.error(callback.error);
     } else {
       callback.data = response;
+      answer=response;
     }
-   
-    return callback(callback.data, callback.error);
+
+    
+   console.log('callback(callback.data, callback.error)'+ JSON.stringify(response));
+   return callback(callback.data, callback.error);
 }
 
 
@@ -179,7 +187,7 @@ isHibernating(response) {
    * This is not a simple copy/paste of the requestOptions object
    * from the previous lab. There should be no
    * hardcoded values.
-   */ 
+   */ //log.info("connector.js callOptions.method"+ callOptions.method + " "+ this.options.url+" "+uri);
   const requestOptions = {
     method: callOptions.method,
     auth: {
@@ -190,7 +198,9 @@ isHibernating(response) {
     uri: uri
   };
   
-  request(requestOptions, (error, response, body) => {
+  return request(requestOptions, (error, response, body) => {
+    console.log('connector.js sendRequest response returned from request method'+ response);
+      
     this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError));
   });
 }

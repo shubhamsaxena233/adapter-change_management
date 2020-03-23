@@ -101,6 +101,7 @@ class ServiceNowAdapter extends EventEmitter {
   connect() {
     // As a best practice, Itential recommends isolating the health check action
     // in its own method.
+    log.info("-----------------------------inside connect------------------------------------");
    this.healthcheck();
   }
 
@@ -115,8 +116,9 @@ class ServiceNowAdapter extends EventEmitter {
  *   that handles the response.
  */
 healthcheck(callback) {
-    
+    log.info("-----------------------------inside healthcheck------------------------------------");
  this.getRecord((result, error) => {
+     log.info("-------------------------------inside getRecord-----------------------------------------");
    /**
     * For this lab, complete the if else conditional
     * statements that check if an error exists
@@ -135,7 +137,7 @@ healthcheck(callback) {
       * If an optional IAP callback function was passed to
       * healthcheck(), execute it passing the error seen as an argument
       * for the callback's errorMessage parameter.
-      */log.error('ServiceNow: Instance ' + this.id + ' is available.');
+      */log.error('ServiceNow: Instance ' + this.id + ' is not available.');
      this.emitOffline((result, error) => callback(result, error));
     
    } else {
@@ -148,7 +150,7 @@ healthcheck(callback) {
       * healthcheck(), execute it passing this function's result
       * parameter as an argument for the callback function's
       * responseData parameter.
-      */ log.debug('ServiceNow: Instance ' + this.id + ' is available.');
+      */ log.info('ServiceNow: Instance ' + this.id + ' is available.');
      this.emitOnline((result, error) => callback(result, error));
    }
  });
@@ -203,6 +205,7 @@ healthcheck(callback) {
      *   handles the response.
      */
     getRecord(callback) {
+        log.info("---------------------inside getRecord 1--------------------------------");
           /**
          * Write the body for this function.
          * The function is a wrapper for this.connector's get() method.
@@ -210,15 +213,35 @@ healthcheck(callback) {
          * get() takes a callback function.
          */
         let response = this.connector.get(callback);
+        //console.log("inside getRecord 2 : "+response);
+        
+        //log.info("inside getRecord 2 : "+response);
+        // if(response){
+        //     log.info("first");
+        //     if(response !== null){
+        //         log.info("second");
+        //         if(typeof (response === 'object')){
+        //             log.info("third :"+JSON.stringify(response));
+        //             if(('body' in response)){
+        //                 log.info("forth");
+        //             }
+        //         }
+        //     }
+        // }
         if (response && response !== null && typeof (response === 'object') && ('body' in response)) {
-
-            var result = response.body.result;
-
+            log.info("------------------------------------inside getRecord 2-----------------------------------");
+            var body=response.body;
+            body = body.substring(1,body.length-1);
+            body="{"+body+"}";
+            log.info("------------------------inside getRecord 3 :"+body);
+            var result = JSON.parse(body).result;
+            log.info("--------------------------inside getRecord 3 :"+result);
             for (var j = 0; j < result.length; j++) {
                 for (var key in result[j]) {
                     if (result[j].hasOwnProperty(key)) {
                         if (key === 'number'){
                             result[j].change_ticket_number = result[j].number;
+                            log.info("result[j].change_ticket_number : "+result[j].change_ticket_number);
                             delete result[j].number;
                         }else if(key === 'sys_id'){
                             result[j].change_ticket_key = result[j].sys_id;
@@ -232,7 +255,7 @@ healthcheck(callback) {
                 }
             }
         }
-       
+       log.info("------------------------------result : "+result);
        return result;
 
     }
