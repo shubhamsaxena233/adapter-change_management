@@ -2,8 +2,6 @@ const request = require('request');
 
 const validResponseRegex = /(2\d\d)/;
 
-var answer=null;
-
 /**
  * The ServiceNowConnector class.
  *
@@ -57,14 +55,11 @@ class ServiceNowConnector {
    *   Will be HTML text if hibernating instance.
    * @param {error} callback.error - The error property of callback.
    */
-  get(callback) {
+    get(callback) {
     let getCallOptions = this.options;
     getCallOptions.method = 'GET';
     getCallOptions.query = 'sysparm_limit=1';
-    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
-    log.info("----------------answer---------------------");
-    callback.results=answer;
-    //return answer;
+    this.sendRequest(getCallOptions, (results, error) => {return callback(results, error)});
   }
 
   /**
@@ -142,7 +137,6 @@ isHibernating(response) {
     if (error) {
       console.error('Error present.');
       callback.error = error;
-      answer=error;
     } else if (!validResponseRegex.test(response.statusCode)) {
       console.error('Bad response code.');
       callback.error = response;
@@ -151,12 +145,9 @@ isHibernating(response) {
       console.error(callback.error);
     } else {
       callback.data = response;
-      answer=response;
     }
-
-    
-   console.log('callback(callback.data, callback.error)'+ JSON.stringify(response));
-   return callback(callback.data, callback.error);
+   
+    return callback(callback.data, callback.error);
 }
 
 
@@ -187,7 +178,7 @@ isHibernating(response) {
    * This is not a simple copy/paste of the requestOptions object
    * from the previous lab. There should be no
    * hardcoded values.
-   */ //log.info("connector.js callOptions.method"+ callOptions.method + " "+ this.options.url+" "+uri);
+   */ log.info("connector.js callOptions.method"+ callOptions.method + " "+ this.options.url+" "+uri);
   const requestOptions = {
     method: callOptions.method,
     auth: {
@@ -198,10 +189,11 @@ isHibernating(response) {
     uri: uri
   };
   
-  return request(requestOptions, (error, response, body) => {
-    console.log('connector.js sendRequest response returned from request method'+ response);
-      
-    this.processRequestResults(error, response, body, (processedResults, processedError) => callback(processedResults, processedError));
+  request(requestOptions, (error, response, body) => {
+      log.info('connector.js sendRequest response returned from request method'+ response);
+     this.processRequestResults(error, response, body, (processedResults, processedError) => { 
+            return callback(processedResults, processedError);
+        });
   });
 }
 
@@ -220,7 +212,7 @@ isHibernating(response) {
  */
  post(callOptions, callback) {
   callOptions.method = 'POST';
-  this.sendRequest(callOptions, (results, error) => callback(results, error));
+  this.sendRequest(callOptions, (results, error) => {return callback(results, error)});
 }
 
 

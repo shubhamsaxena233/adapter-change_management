@@ -26,11 +26,13 @@ function mainOnObject() {
     const connector = new ServiceNowConnector(options);
     // Test the object's get and post methods.
     // You must write the arguments for get and post.
+    var ans=undefined;
     connector.get((data, error) => {
         if (error) {
             console.error(`\nError returned from GET request:\n${JSON.stringify(error)}`);
         }
-        console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
+        ans=data;
+        console.log(`\nResponse returned from GET request   :\n${JSON.stringify(ans)}`)
     });
     connector.post(options, (data, error) => {
         if (error) {
