@@ -214,14 +214,18 @@ class ServiceNowAdapter extends EventEmitter {
        */
         //var abcd=undefined;
         this.connector.get((results, error) => {
-            //log.info("callback.result : " + JSON.stringify(results));
-            if (results) {
-                var response = results.body;
-                var result = JSON.parse(response).result;
-                //log.info("callback.error : " + JSON.stringify(result));
-                for (var j = 0; j < result.length; j++) {
-                    for (var key in result[j]) {
-                        if (result[j].hasOwnProperty(key)) {
+            //return callback(results, error);
+            log.info("callback.result : " + JSON.stringify(results));
+            
+             if (results) {
+                 var response = results.body;
+                 
+                 var result = JSON.parse(response).result;
+                 
+            //     //log.info("callback.error : " + JSON.stringify(result));
+                 for (var j = 0; j < result.length; j++) {
+                     for (var key in result[j]) {
+                         if (result[j].hasOwnProperty(key)) {
                             if (key === 'number') {
                                 result[j].change_ticket_number = result[j].number;
                                 log.info("result[j].change_ticket_number : " + result[j].change_ticket_number);
@@ -236,12 +240,12 @@ class ServiceNowAdapter extends EventEmitter {
                                 delete result[j][key];
                             }
                         }
-                    }
-                }
-                return callback(result, error);
-            } else {
-                return callback(response, error);
-            }
+                     }
+                 }
+                 return callback(result, error);
+             } else {
+                 return callback(results, error);
+             }
         });
     }
 
@@ -270,6 +274,7 @@ class ServiceNowAdapter extends EventEmitter {
             serviceNowTable: this.props.serviceNowTable
         };
         this.connector.post(callOptions, (results, error) => {
+            //return callback(results, error);
             if (results) {
                 var response = results.body;
                 var result = JSON.parse(response).result;
@@ -288,7 +293,7 @@ class ServiceNowAdapter extends EventEmitter {
 
                 return callback(result, error);
             } else {
-                return callback(response, error);
+                return callback(results, error);
             }
 
         });
